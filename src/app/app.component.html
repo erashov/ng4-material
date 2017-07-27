@@ -1,9 +1,66 @@
-<md-grid-list cols="4" rowHeight="100px">
-  <md-grid-tile
-      *ngFor="let tile of tiles"
-      [colspan]="tile.cols"
-      [rowspan]="tile.rows"
-      [style.background]="tile.color">
-    {{tile.text}}
-  </md-grid-tile>
-</md-grid-list>
+<md-toolbar color="primary">
+
+    <span>MyCompany</span>
+    <span class="example-spacer"></span>
+    <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>
+    
+</md-toolbar>
+
+<md-menu #appMenu="mdMenu">
+  <button md-menu-item> Settings </button>
+  <button md-menu-item> Help </button>
+</md-menu>
+<md-card class="example-card" *ngFor="let data of (myData ? myData.slice(0,10): []); let i = index">
+
+  <img md-card-image src="{{ data.url }}">
+  <md-card-header>
+    <md-card-title>{{ data.title }}</md-card-title>
+  </md-card-header>
+
+  <md-card-actions>
+    <button md-button>LIKE</button>
+    <button md-button>SHARE</button>
+  </md-card-actions>
+  
+</md-card>
+
+<div class="example-container mat-elevation-z8">
+
+
+  <md-table #table [dataSource]="dataSource" class="example-table"
+            mdSort mdSortActive="created" mdSortDisableClear mdSortDirection="asc">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Number Column -->
+    <ng-container cdkColumnDef="number">
+      <md-header-cell *cdkHeaderCellDef> Number </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.number}} </md-cell>
+    </ng-container>
+
+    <!-- Title Column -->
+    <ng-container cdkColumnDef="title">
+      <md-header-cell *cdkHeaderCellDef> Title </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.title}} </md-cell>
+    </ng-container>
+
+    <!-- State Column -->
+    <ng-container cdkColumnDef="state">
+      <md-header-cell *cdkHeaderCellDef> State </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.state}} </md-cell>
+    </ng-container>
+
+    <!-- Created Column -->
+    <ng-container cdkColumnDef="created">
+      <md-header-cell *cdkHeaderCellDef md-sort-header disableClear="true"> Created </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.created.toDateString()}} </md-cell>
+    </ng-container>
+
+    <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table> 
+  <md-paginator [length]="dataSource.resultsLength"
+                [pageSize]="30">
+  </md-paginator>
+</div>
