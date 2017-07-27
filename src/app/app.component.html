@@ -50,6 +50,10 @@
       <md-header-cell *cdkHeaderCellDef> State </md-header-cell>
       <md-cell *cdkCellDef="let row"> {{row.state}} </md-cell>
     </ng-container>
+        <ng-container cdkColumnDef="login">
+      <md-header-cell *cdkHeaderCellDef> Login </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.login}} </md-cell>
+    </ng-container>
 
     <!-- Created Column -->
     <ng-container cdkColumnDef="created">

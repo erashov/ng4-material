@@ -18,7 +18,7 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  displayedColumns = ['created', 'state', 'number', 'title'];
+  displayedColumns = ['created', 'state', 'number', 'title','login'];
   exampleDatabase: ExampleHttpDao | null;
   dataSource: ExampleDataSource | null;
 
@@ -33,7 +33,7 @@ export class AppComponent {
 
     this.dataSource = new ExampleDataSource(this.exampleDatabase!,
         this.sort, this.paginator);
-        console.log(this.exampleDatabase);
+
         
   }
 }
@@ -42,20 +42,21 @@ export interface GithubIssue {
   number: string;
   state: string;
   title: string;
+  login:string;
   created: Date;
 }
 
 /** An example database that the data source uses to retrieve data for the table. */
 export class ExampleHttpDao {
-  constructor(private http: Http) {   console.log(1112);}
+  constructor(private http: Http) {}
 
   getRepoIssues(sort: string, order: string, page: number): Observable<Response> {
-    console.log(1113);
+
     
     const href = 'https://api.github.com/search/issues';
     const requestUrl =
         `${href}?q=repo:angular/material2&sort=${sort}&order=${order}&page=${page + 1}`;
-        console.log(requestUrl);
+
         
     return this.http.get(requestUrl);
   }
@@ -78,13 +79,12 @@ export class ExampleDataSource extends DataSource<GithubIssue> {
               private _sort: MdSort,
               private _paginator: MdPaginator) {
     super();
-    console.log(1);
+
     
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<GithubIssue[]> {
-        console.log(2);
     const displayDataChanges = [
       this._sort.mdSortChange,
       this._paginator.page,
@@ -99,21 +99,18 @@ export class ExampleDataSource extends DataSource<GithubIssue> {
         .startWith(null)
         .switchMap(() => {
           this.isLoadingResults = true;
-                    console.log(3333331);
           return this._exampleDatabase.getRepoIssues(
               this._sort.active, this._sort.direction, this._paginator.pageIndex);
         })
         .catch(() => {
           // Catch if the GitHub API has reached its rate limit. Return empty result.
           this.isRateLimitReached = true;
-          console.log(333333);
           
           return Observable.of(null);
         })
         .map(result => {
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
-                    console.log(3333332);
           return result;
         })
         .map(result => {
@@ -121,7 +118,6 @@ export class ExampleDataSource extends DataSource<GithubIssue> {
 
           this.isRateLimitReached = false;
           this.resultsLength = result.json().total_count;
-                    console.log(3333334);
 
           return this.readGithubResult(result);
         });
@@ -132,13 +128,13 @@ export class ExampleDataSource extends DataSource<GithubIssue> {
   disconnect() {}
 
   private readGithubResult(result: Response): GithubIssue[] {
-              console.log(3333335);
     return result.json().items.map(issue => {
       return {
         number: issue.number,
         created: new Date(issue.created_at),
         state: issue.state,
         title: issue.title,
+        login:issue.user.login
       };
     });
   }
