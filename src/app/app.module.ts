@@ -34,8 +34,9 @@ import {
     MdToolbarModule,
     MdTooltipModule,
 } from '@angular/material';
-  import { CdkTableModule } from '@angular/cdk';
+  import { CdkTableModule } from '@angular/cdk/table';
 import { AppComponent } from './app.component';
+
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
